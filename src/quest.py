@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import requests
+from BeautifulSoup import BeautifulSoup
 
 #def NameBadRequest()#План "средниум"
 
@@ -14,9 +15,16 @@ def GetQuest():
 	#print(url)
 	ans = requests.post('https://duckduckgo.com', data={'q':url_text,'format':'json', 'ia':'about'})
 	print(ans.url)
-	print(ans.json())
-	ans = ans.json()
-	ans = ans['AbstractText']
+	print(ans.text)
+	ans = ans.text
+	parsed = BeautifulSoup(ans)
+	topic = parsed.findAll('div', {'id':'zci_about'})
+	topic = topic.findAll('div', {'class':'c-info--cw  cw has-aux'})
+	topic = topic.findAll('div', {'class':'czi-main  c-info'})
+	topic = topic.findAll('div', {'class':'czi-body'})
+	topic = topic.findAll('div', {'class':'c-info__body'})
+	topic = topic.findAll('div', {'class':'c-info__content  chomp  js-ellipsis'})
+	print(topic)
 	print("\n\n", ans)
 	if len(ans) <= 5:
 		BadRequest()

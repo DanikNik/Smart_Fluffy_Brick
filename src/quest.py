@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-import requests
-from BeautifulSoup import BeautifulSoup
+import requests, re
+from bs4 import BeautifulSoup
 
 #def NameBadRequest()#План "средниум"
 
@@ -10,20 +10,22 @@ def BadRequest():###Пока что так! -- план минимум
 
 def GetQuest():
 	global url_text
-	print(url_text)
+	#print(url_text)
 	#url = 'https://duckduckgo.com?q='+url_text+'&format=json&ia=about'
 	#print(url)
 	ans = requests.post('https://duckduckgo.com', data={'q':url_text,'format':'json', 'ia':'about'})
-	print(ans.url)
-	print(ans.text)
+	#print(ans.url)
+	#print(ans.text)
 	ans = ans.text
 	parsed = BeautifulSoup(ans)
-	topic = parsed.findAll('div', {'id':'zci_about'})
-	topic = topic.findAll('div', {'class':'c-info--cw  cw has-aux'})
-	topic = topic.findAll('div', {'class':'czi-main  c-info'})
-	topic = topic.findAll('div', {'class':'czi-body'})
-	topic = topic.findAll('div', {'class':'c-info__body'})
-	topic = topic.findAll('div', {'class':'c-info__content  chomp  js-ellipsis'})
+	#print("!!!",parsed)
+	topics = parsed.findAll('div', {'id':'zci-about'})#[0][0][0][1]
+#	topic = topic.findAll('div', {'class':'c-info--cw  cw has-aux'})
+#	topic = topic.findAll('div', {'class':'czi-main  c-info'})
+#	topic = topic.findAll('div', {'class':'czi-body'})
+#	topic = topic.findAll('div', {'class':'c-info__body'})
+	ans = topics.findAll('div', {'class': re.compile('results_*')})
+	ans = ans[1].text
 	print(topic)
 	print("\n\n", ans)
 	if len(ans) <= 5:

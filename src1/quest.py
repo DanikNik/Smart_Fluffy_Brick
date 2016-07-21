@@ -29,7 +29,7 @@ def GetThingQuest(request):
 				bb = 0
 				eb = 0
 
-		print(ans)
+		#print(ans)
 		if qi > 0:
 			ans = "Возможно, вы имели ввиду "+ans
 		return ans
@@ -55,8 +55,8 @@ def WhatIs(text, text_arr, url):
 	ans = GetThingQuest(url)
 	return ans
 
-#def HowTo(text, text_arr, url):
-
+def GoTo(text, text_arr, url):
+	print("Еще не готово :)")
 
 text = input()##Способ общения: input или open
 l_text = text.lower()
@@ -66,6 +66,6 @@ url_text = ""
 if (l_text.find('кто такой') != -1) or (l_text.find('кто такая') != -1) or (l_text.find('кто такое') != -1) or (l_text.find('что такое') != -1):
 	#План "средниум -- "KtoTakoi(l_text, arr_l_text)
 	ans = WhatIs(l_text, arr_l_text, url_text)
-elif (l_text.find('как приготовить')) or (l_text.find('как сварить')) or (l_text.find('как пожарить')) or (l_text.find('как испечь')) or (l_text.find('как запечь')) or (l_text.find('как сделать')):# or (l_text.find('как ')) or (l_text.find('')) or (l_text.find('')) or (l_text.find(''))
-	#ans = HowTo(l_text, arr_l_text, url_text)
+elif (l_text.find('как дойти')) or (l_text.find('как доехать')):
+	ans = DoTo(l_text, arr_l_text, url_text)
 print("\n====================ANSWER==================\n"+ans)

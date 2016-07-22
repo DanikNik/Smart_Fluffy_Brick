@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import requests, re
-from bs4 import BeautifulSoup as htmlsoup
+#from bs4 import BeautifulSoup as htmlsoup
 
 #def NameBadRequest()#План "средниум"
 

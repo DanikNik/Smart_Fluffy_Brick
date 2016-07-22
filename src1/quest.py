@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import requests, re
+from bs4 import BeautifulSoup as htmlsoup
 
 #def NameBadRequest()#План "средниум"
 
@@ -37,7 +38,7 @@ def GetThingQuest(request):
 		ans = "Я вас не понял, перефразируйте запрос"
 		return ans
 
-def WhatIs(text, text_arr, url):
+def WhatIs(text, text_arr):
 	url = ""
 	try:
 		mi = text_arr.index('такая') + 1
@@ -55,17 +56,30 @@ def WhatIs(text, text_arr, url):
 	ans = GetThingQuest(url)
 	return ans
 
-def GoTo(text, text_arr, url):
-	print("Еще не готово :)")
+def GetFreeQuest(request):
+	print(href)
+
+def FreeQuest(text, text_arr):
+	url = ""
+	for i in range(len(text_arr) - 1):
+		if i != 0:
+			if i != len(text_arr) - 1:
+				url += text_arr[i]+" "
+			else:
+				url += text_arr[i]
+	ans = GetFreeQuest(url)
+
 
 text = input()##Способ общения: input или open
 l_text = text.lower()
 arr_l_text = l_text.split()
-url_text = ""
 
-if (l_text.find('кто такой') != -1) or (l_text.find('кто такая') != -1) or (l_text.find('кто такое') != -1) or (l_text.find('что такое') != -1):
-	#План "средниум -- "KtoTakoi(l_text, arr_l_text)
-	ans = WhatIs(l_text, arr_l_text, url_text)
-elif (l_text.find('как дойти')) or (l_text.find('как доехать')):
-	ans = DoTo(l_text, arr_l_text, url_text)
+if arr_l_text[0] == "вопрос":
+	if (l_text.find('кто такой') != -1) or (l_text.find('кто такая') != -1) or (l_text.find('кто такое') != -1) or (l_text.find('что такое') != -1):
+		ans = WhatIs(l_text, arr_l_text)
+	else:
+		ans = "Неверная форма вопроса."
+elif arr_l_text[0] == "поищи":
+	ans = FreeQuest(l_text, arr_l_text)
+
 print("\n====================ANSWER==================\n"+ans)

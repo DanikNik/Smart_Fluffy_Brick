@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-import requests, re
-#from bs4 import BeautifulSoup as htmlsoup
+import requests
+from bs4 import BeautifulSoup as beso
 
 #def NameBadRequest()#План "средниум"
 
@@ -54,19 +54,25 @@ def WhatIs(text, text_arr):
 		url += str(text_arr[mi1])
 		mi1 += 1
 	ans = GetThingQuest(url)
-	return ans
+	return ans.lower()
 
 def GetFreeQuest(request):
-	print(href)
+	ans = requests.get('http://www.nigma.ru/?t=web&lang=all&srt=0&s='+request).text
+	soup = beso(ans)
+	print(ans)
+	ans = soup.findAll('li', {'value':'1'})
+	return ans
+	print(ans, ".")
 
 def FreeQuest(text, text_arr):
 	url = ""
-	for i in range(len(text_arr) - 1):
+	for i in range(len(text_arr)):
 		if i != 0:
 			if i != len(text_arr) - 1:
 				url += text_arr[i]+" "
 			else:
 				url += text_arr[i]
+	print(url, ".")
 	ans = GetFreeQuest(url)
 
 
@@ -74,12 +80,8 @@ text = input()##Способ общения: input или open
 l_text = text.lower()
 arr_l_text = l_text.split()
 
-if arr_l_text[0] == "вопрос":
-	if (l_text.find('кто такой') != -1) or (l_text.find('кто такая') != -1) or (l_text.find('кто такое') != -1) or (l_text.find('что такое') != -1):
-		ans = WhatIs(l_text, arr_l_text)
-	else:
-		ans = "Неверная форма вопроса."
-elif arr_l_text[0] == "поищи":
+if (l_text.find('кто такой') != -1) or (l_text.find('кто такая') != -1) or (l_text.find('кто такое') != -1) or (l_text.find('что такое') != -1):
+	ans = WhatIs(l_text, arr_l_text)
+else:
 	ans = FreeQuest(l_text, arr_l_text)
-
-print("\n====================ANSWER==================\n"+ans)
+print(ans)

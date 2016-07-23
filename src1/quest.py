@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import requests
-from bs4 import BeautifulSoup as beso
 #################################################################################
 def GetThingQuest(request):
 	try:
@@ -15,7 +14,6 @@ def GetThingQuest(request):
 		eb = 0
 		todel = ""
 		for i in ans:
-			#print(i, bb, eb, todel)
 			if i == "(":
 				bb += 1
 			elif i == ")":
@@ -51,7 +49,6 @@ def GetThingQuest(request):
 		ans = ans.replace('англ.', '')
 		ans = ans.replace('фран.', '')
 		ans = ans.replace('франц.', '')
-		#print(ans)
 		if qi > 0:
 			ans = "Возможно, вы имели ввиду "+ans
 		return ans
@@ -101,7 +98,7 @@ text = input()##Способ общения: input или open
 l_text = text.lower()
 arr_l_text = l_text.split()
 #################################################################################
-if (arr_l_text[0] == "переведи") or (arr_l_text[1] == "переведи"):
+if (l_text.find("переведи") != -1) or (l_text.find("переведи") != -1):
 	lang = arr_l_text[2]
 	ans = Trans(l_text, lang)
 elif (l_text.find('кто такой') != -1) or (l_text.find('кто такая') != -1) or (l_text.find('кто такое') != -1) or (l_text.find('что такое') != -1) or (l_text.find('кто такие') != -1) or ((l_text.find('что значит')) != 1):

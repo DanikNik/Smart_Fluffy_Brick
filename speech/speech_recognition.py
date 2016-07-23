@@ -1,9 +1,8 @@
 import pyaudio
 import wave
 import audioop
-import os
+import threading
 import time
-import math
 
 
 # Microphone stream config.
@@ -38,14 +37,18 @@ def audio_int(num_samples=50):
 
 def record(start_pulse):
 	 frames = []
+	 levels_list = []
 	 print("I RECORD YOU MOTHERFUCKER!!!")
 	 i = 0
 	 while True:
 		 data = stream.read(CHUNK)
 		 frames.append(data)
+		 sound_level = abs(audioop.avg((data), 4))
+		 levels_list.append(sound_level)
 		 i = i + 1
-		 if i >= 1000:
-			 if (frames[-(int(RATE/CHUNK)*SILENCE_LIMIT)] < start_pulse) :
+		 print(i)
+		 if i >= 20:
+			 if (levels_list[-(int(RATE/CHUNK)*SILENCE_LIMIT)] < start_pulse) :
 				 break
 	 
 	 wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
@@ -56,12 +59,15 @@ def record(start_pulse):
 	 wf.close()
 	 print("I KNOW WHAT YOU SAID BITCH!")
 
-start_level = audio_int() * 2
+start_level = audio_int() * 1.5
+print("Ща")
+time.sleep(3)
+print("Все, збс")
 
 while True:
 	level = abs(audioop.avg(stream.read(CHUNK), 4))
-	n = int(level / 10000)
+	n = int(level / 20000)
 	print("#" * n)
-	#if level > start_level:
-		#record(start_level)
-		#break
+	if level > start_level:
+		record(start_level)
+		break

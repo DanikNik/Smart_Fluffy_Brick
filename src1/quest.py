@@ -98,11 +98,12 @@ text = input()##Способ общения: input или open
 l_text = text.lower()
 arr_l_text = l_text.split()
 #################################################################################
-if (l_text.find("переведи") != -1) or (l_text.find("переведи") != -1):
+if (arr_l_text[0] == "переведи") or (arr_l_text[1] == "переведи"):
 	lang = arr_l_text[2]
 	ans = Trans(l_text, lang)
-elif (l_text.find('кто такой') != -1) or (l_text.find('кто такая') != -1) or (l_text.find('кто такое') != -1) or (l_text.find('что такое') != -1) or (l_text.find('кто такие') != -1) or ((l_text.find('что значит')) != 1):
-			ans = WhatIs(l_text, arr_l_text)
+elif (arr_l_text[0] == "вопрос") or (arr_l_text[1] == "вопрос"):
+	if (l_text.find('кто такой') != -1) or (l_text.find('кто такая') != -1) or (l_text.find('кто такое') != -1) or (l_text.find('что такое') != -1) or (l_text.find('кто такие') != -1) or ((l_text.find('что значит')) != 1):
+		ans = WhatIs(l_text, arr_l_text)
 else:
 	ans = FreeQuest(arr_l_text, arr_l_text)
 print(ans)

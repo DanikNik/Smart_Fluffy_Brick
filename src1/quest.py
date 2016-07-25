@@ -15,7 +15,7 @@ def GetThingQuest(request):
 		eb = 0
 		todel = ""
 		xy = {'(':')','[':']','{':'}'}
-		for x in list(xy.keys()):#А тут мы убираем всё, что в любых скобках(масс. xy)
+		for x in list(xy.keys()):#А тут мы убираем всё, что в любых скобках(масс. "xy")
 			y = xy[x]
 			for i in ans:
 				if i == x:
@@ -33,9 +33,9 @@ def GetThingQuest(request):
 		ans = ans.lower()
 		ban = {' i ':' певрый ',' ii ':' второй ',' iii ':' третий ',' iv ':' четвёртый ',' v ':' пятый ',' vi ':' шестой ', ' vii ':' седьмой ',  'viii ':' восьмой ',' iix ':' восьмой ',' ix ':' девятый ',' x ':' десятый ',' xi ':'  одиннадцатый ', ' xii ':' двенадцатый ', ' xiii ':' тринадцатый', ' xiiv ':' тринадцатый ', ' xiv ':' четырнадцатый ',' xv ':' пятнадцатый ',' xvi ':' шестнадцатый ',' xvii ':' семнадцатый ',' xviii ':' восемнадцатый ',' xiix ':' восемнадцатый ',' xix ':' девятнадцатый ',' xx ':' двадцатый ',' xxi ':' двадцать первый ',' xxii ':' двадцать второй ',' xxiii ':' двадцать третий ',' xxiiv':' двадцать третий ',' xxiv ':' двадцать четвёртый ',' xxv ':' двадцать пятый ',' xxvi ':' двадцать шестой ',' xxvii ':' двадцать седьмой','(':'',')':'','[':'',']':'','{':'','}':'','англ.':'','франц.':'','фран.':''}
 		for key in list(ban.keys()):#А здесь заменяем римскую нумерацию нормальной(не идеально по родам) и подчищаем скобки и некоторые сокращения.
-			ans = ans.replace(key, ban[key])
+			ans = ans.replace(key, ban[key])+". Wikipedia... точка org..."
 		if qi > 0:#qi -- номер ответа от Вики. если он > 0 -- значит ответ сожет быть неточным. Это мы указываем в ответе:
-			ans = "Возможно, вы имели ввиду "+ans
+			ans = "Возможно, вы имели ввиду "+ans+". Wikipedia... точка org..."
 		return ans
 	except:
 		ans = "Я вас не понял, перефразируйте запрос"
@@ -74,7 +74,7 @@ def Trans(text, lang):
 		text = text[mi:]
 		lang = langs.get(lang)
 		ans = requests.post('https://translate.yandex.net/api/v1.5/tr.json/translate', data={'key':'trnsl.1.1.20160723T075443Z.3071860cf4a85efc.3fef18c09d8253d502944581b4360833ed8749f2','lang':lang,'text':text}).json()
-		ans = ans['text'][0]
+		ans = "Ответ: "+ans['text'][0]+". Переведено Yandex... точка ru..."
 	except:#...Но если у нас не получается:
 		ans = "Данный язык недоступен. Доступные языки: "+str(list(langs.keys()))
 	return ans
@@ -88,7 +88,7 @@ def Weather(text, text_arr):
 		city = text_arr[mi]#город
 		city = cities[city]#а теперь условное название города
 		ans = requests.get('http://www.realmeteo.ru/'+city+'/1/current').text
-		soup = beso(ans)
+		soup = beso(ans, "lxml")
 		meteo = soup.findAll('td', {'class':'meteodata'})#Ищем все теги td
 		for i in range(5):#перебираем по пяти параметрам(нас интересуют только перве пять в "meteo")
 			meteodata = str(meteo[i])
@@ -106,7 +106,7 @@ def Weather(text, text_arr):
 		baro_metr = finlist[2]#Вот тут мы вытаскиваем данные по переменным
 		aqua_metr = finlist[3]####
 		wind_metr = finlist[4]#######
-		ans = "Погода в городе "+text_arr[mi]+". Температура воздуха "+real_temp+" градусов. Ощущается "+thin_temp+". Атмосферное давление "+baro_metr+" миллиметров ртутного столба. Влажность воздуха "+aqua_metr+" процентов. Скорость ветра "+wind_metr+" метров в секунду. Удачного дня!"
+		ans = "Погода в городе "+text_arr[mi]+". Температура воздуха "+real_temp+" градусов. Ощущается "+thin_temp+". Атмосферное давление "+baro_metr+" миллиметров ртутного столба. Влажность воздуха "+aqua_metr+" процентов. Скорость ветра "+wind_metr+" метров в секунду. RealMeteo... точка ru..."
 	except:#...А если не получается:
 		ans = "Я вас не понял. Перефразируйте запрос."
 	return ans

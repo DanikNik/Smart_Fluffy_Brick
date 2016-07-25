@@ -26,15 +26,16 @@ https://duckduckgo.com/?q=<Искомое>&ia=about&format=json
 |WEATHER|
 +-------+
 
-yahoo weather:1)
-https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text=<место(город, страна)>)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys
-Дальше var = json.loads(<ответ>)
-потом var[]
+requests.get('http://www.realmeteo.ru/<Город>/1/current')
+Темпетатура воздуха:
+ soup.findAll('td', {'class':'meteodata','id':'col1'})
+Скорость ветра:
+ soup.findAll('td', {'class':'meteodata','colspan':'2'})
+ИЛИ
+ soup.findAll('td', {'class':'meteodata'})[<Нечто>]
 
-НЕ РАБОТАЕТ =)))
 
 
 
-
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 END.

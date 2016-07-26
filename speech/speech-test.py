@@ -1,6 +1,7 @@
 import requests
 import xml.etree.ElementTree as xmlt
 import CmdRecorder as rec
+
 def getCommand():
 
 	url = 'https://asr.yandex.net/asr_xml'
@@ -15,8 +16,8 @@ def getCommand():
 		files = {'file': file1.read()}
 	req = requests.post(url, params = params, headers = headers, files = files)
 
-	income_xml = xmlt.fromstring(req.text)
-	command = income_xml[0].text
-	return(command)
+	#income_xml = xmlt.fromstring(req.text)
+	#command = income_xml[0].text
+	return(req.text)
 
 print(getCommand())

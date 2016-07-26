@@ -2,7 +2,7 @@ import pyaudio
 import wave
 import audioop
 import threading
-import time
+
 
 
 # Microphone stream config.
@@ -11,10 +11,8 @@ FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 16000
 WAVE_OUTPUT_FILENAME = 'command.pcm'
-
-
-SILENCE_LIMIT = 1  
-
+  
+SILENCE_LIMIT = 2
 p = pyaudio.PyAudio()
 stream = p.open(format=FORMAT,
 					 channels=CHANNELS,
@@ -27,8 +25,6 @@ def audio_int(num_samples=50):
 		  average intensities while you're talking and/or silent. The average
 		  is the avg of the 20% largest intensities recorded.
 	 """
-
-
 	 values = [abs(audioop.avg(stream.read(CHUNK), 4)) for x in range(num_samples)] 
 	 values = sorted(values, reverse=True)
 	 intensity = sum(values[:int(num_samples * 0.2)]) / int(num_samples * 0.2)
@@ -46,9 +42,8 @@ def record(start_pulse):
 		 sound_level = abs(audioop.avg((data), 4))
 		 levels_list.append(sound_level)
 		 i = i + 1
-		 print(i)
 		 if i >= 20:
-			 if (levels_list[-(int(RATE/CHUNK)*SILENCE_LIMIT)] < start_pulse) :
+			 if (levels_list[int(-SILENCE_LIMIT*RATE/CHUNK)] - start_pulse > 200000) :
 				 break
 	 
 	 wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
@@ -59,10 +54,7 @@ def record(start_pulse):
 	 wf.close()
 	 print("I KNOW WHAT YOU SAID BITCH!")
 
-start_level = audio_int() * 1.5
-print("Ща")
-time.sleep(3)
-print("Все, збс")
+start_level = audio_int() * 3
 
 while True:
 	level = abs(audioop.avg(stream.read(CHUNK), 4))

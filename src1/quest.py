@@ -15,7 +15,7 @@ def GetThingQuest(request):
 		eb = 0
 		todel = ""
 		xy = {'(':')','[':']','{':'}'}
-		for x in list(xy.keys()):#А тут мы убираем всё, что в любых скобках(масс. "xy")
+		for x in xy:#А тут мы убираем всё, что в любых скобках(масс. "xy")
 			y = xy[x]
 			for i in ans:
 				if i == x:
@@ -113,7 +113,7 @@ def Weather(text, text_arr):
 		ans = "Погода в городе "+city1+". Температура воздуха "+real_temp+" градусов. Ощущается "+thin_temp+". Атмосферное давление "+baro_metr+" миллиметров ртутного столба. Влажность воздуха "+aqua_metr+" процентов. Скорость ветра "+wind_metr+" метров в секунду. RealMeteo... точка ru..."
 	except:#...А если не получается:
 		ans = "Я не знаю такого города"
-	return ans
+	return ans	
 
 def main():
 	text = input()##Способ общения: input или open

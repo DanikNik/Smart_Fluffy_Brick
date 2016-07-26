@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-import requests
+import requests, timeit
 from bs4 import BeautifulSoup as beso
 #################################################################################
 def GetThingQuest(request):
@@ -33,7 +33,7 @@ def GetThingQuest(request):
 		ans = ans.lower()
 		ban = {' i ':' певрый ',' ii ':' второй ',' iii ':' третий ',' iv ':' четвёртый ',' v ':' пятый ',' vi ':' шестой ', ' vii ':' седьмой ',  'viii ':' восьмой ',' iix ':' восьмой ',' ix ':' девятый ',' x ':' десятый ',' xi ':'  одиннадцатый ', ' xii ':' двенадцатый ', ' xiii ':' тринадцатый', ' xiiv ':' тринадцатый ', ' xiv ':' четырнадцатый ',' xv ':' пятнадцатый ',' xvi ':' шестнадцатый ',' xvii ':' семнадцатый ',' xviii ':' восемнадцатый ',' xiix ':' восемнадцатый ',' xix ':' девятнадцатый ',' xx ':' двадцатый ',' xxi ':' двадцать первый ',' xxii ':' двадцать второй ',' xxiii ':' двадцать третий ',' xxiiv':' двадцать третий ',' xxiv ':' двадцать четвёртый ',' xxv ':' двадцать пятый ',' xxvi ':' двадцать шестой ',' xxvii ':' двадцать седьмой','(':'',')':'','[':'',']':'','{':'','}':'','англ.':'','франц.':'','фран.':''}
 		for key in list(ban.keys()):#А здесь заменяем римскую нумерацию нормальной(не идеально по родам) и подчищаем скобки и некоторые сокращения.
-			ans = ans.replace(key, ban[key])+". Wikipedia... точка org..."
+			ans = ans.replace(key, ban[key])
 		if qi > 0:#qi -- номер ответа от Вики. если он > 0 -- значит ответ сожет быть неточным. Это мы указываем в ответе:
 			ans = "Возможно, вы имели ввиду "+ans+". Wikipedia... точка org..."
 		return ans
@@ -80,12 +80,16 @@ def Trans(text, lang):
 	return ans
 def Weather(text, text_arr):
 	#Это условные названия городов для realmeteo.ru
+	adds = ['великий','нижний','минеральные','санкт']#так начинаются города, состоящий из двух слов
 	cities = {'абакан':'abakan','анапа':'anapa','архангельск':'arkhangelsk','астрахань':'astrakhan','барнаул':'barnaul','брянск':'bryansk','великий новгород':'vnovgorod','владивосток':'vladivostok','волгоград':'volgograd','вологда':'vologda','воронеж':'voronezh','екатеринбург':'ekaterinburg','иваново':'ivanovo','ижевск':'izhevsk','казань':'kazan','калининград':'kaliningrad','киров':'kirov','краснодар':'krasnodar','красноярск':'krasnoyarsk','магадан':'magadan','магнитогорск':'magnitogorsk','майкоп':'maykop','махачкала':'mahachkala','москва':'moscow','мурманск':'murmansk','набережные челны':'nab_chelnu','новокузнецк':'novokuznetsk','омск':'omsk','оренбург':'orenburg','пенза':'penza','пермь':'perm','псков':'pskov','санкт-петербург':'spb','саратов':'saratov','симферополь':'simferopol','смоленск':'smolensk','сочи':'sochi','сыктывкар':'syktyvkar','таганрог':'taganrog','тверь':'tver','тула':'tula','тюмень':'tumen','уфа':'ufa','хабаровск':'habarovsk','чебоксары':'cheboksary','челябинск':'chelyabinsk','ярослваль':'yaroslavl'}
 	citycodes = {0:3, 1:4, 2:3, 3:4, 4:3}#это данные для поиска значений
 	finlist = []#будущий лист значений
 	try:#Пробуем...
 		mi = text_arr.index("городе") + 1
 		city = text_arr[mi]#город
+		if adds.count(city) != 0:#Нас лучай, если название города состоит из двух слов:
+			city += " "+text_arr[mi+1]
+		city1=  city
 		city = cities[city]#а теперь условное название города
 		ans = requests.get('http://www.realmeteo.ru/'+city+'/1/current').text
 		soup = beso(ans, "lxml")
@@ -106,9 +110,9 @@ def Weather(text, text_arr):
 		baro_metr = finlist[2]#Вот тут мы вытаскиваем данные по переменным
 		aqua_metr = finlist[3]####
 		wind_metr = finlist[4]#######
-		ans = "Погода в городе "+text_arr[mi]+". Температура воздуха "+real_temp+" градусов. Ощущается "+thin_temp+". Атмосферное давление "+baro_metr+" миллиметров ртутного столба. Влажность воздуха "+aqua_metr+" процентов. Скорость ветра "+wind_metr+" метров в секунду. RealMeteo... точка ru..."
+		ans = "Погода в городе "+city1+". Температура воздуха "+real_temp+" градусов. Ощущается "+thin_temp+". Атмосферное давление "+baro_metr+" миллиметров ртутного столба. Влажность воздуха "+aqua_metr+" процентов. Скорость ветра "+wind_metr+" метров в секунду. RealMeteo... точка ru..."
 	except:#...А если не получается:
-		ans = "Я вас не понял. Перефразируйте запрос."
+		ans = "Я не знаю такого города"
 	return ans
 
 def main():
@@ -130,5 +134,4 @@ def main():
 	print(ans)
 
 ###MAIN###
-
 main()

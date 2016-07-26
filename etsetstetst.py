@@ -12,7 +12,7 @@ import xml.etree.ElementTree as xmlt
 url = 'https://asr.yandex.net/asr_xml'
 params = {'uuid':'34353bf726ff4ea885eea4164d3ab413',
               'key' : 'f1233cf8-c27a-4bad-9b5e-04f6ed2f265a',
-              'topic' : 'queries', 
+              'topic' : 'notes', 
               'lang':'ru-RU'}
 headers = {"Content-Type": "audio/x-pcm;bit=16;rate=16000"}
 
@@ -84,7 +84,7 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
     rel = int(RATE/CHUNK)
     slid_win = deque(maxlen=SILENCE_LIMIT * rel)
     #Prepend audio from 0.5 seconds before noise was detected
-    prev_audio = deque(maxlen=PREV_AUDIO * rel) 
+    prev_audio = deque(maxlen=int(PREV_AUDIO * rel)) 
     started = False
     n = num_phrases
     response = []
@@ -108,12 +108,10 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
                 print ("Response", r)
             else:
                 response.append(r)
-            # Remove temp file. Comment line to review.
-            os.remove(filename)
             # Reset all
             started = False
             slid_win = deque(maxlen=SILENCE_LIMIT * rel)
-            prev_audio = deque(maxlen=0.5 * rel) 
+            prev_audio = deque(maxlen=int(0.5 * rel) )
             audio2send = []
             n -= 1
             print ("Listening ...")
@@ -133,7 +131,7 @@ def save_speech(data, p):
 
     filename = 'command'
     # writes data to WAV file
-    data = ''.join(data)
+    data = b''.join(data)
     wf = wave.open(filename + '.pcm', 'wb')
     wf.setnchannels(1)
     wf.setsampwidth(p.get_sample_size(pyaudio.paInt16))
@@ -153,21 +151,18 @@ def stt_google_wav(audio_fname):
         files = {'file': file1.read()}
 
     
-    req = requests.post(GOOGLE_SPEECH_URL, data=flac_cont, headers=hrs)
+    req = requests.post(url, params = params, headers=headers, files = files)
     print ("Sending request to Google TTS")
     #print "response", response
-    try:
-        response = req.text
-        income_xml = xmlt.fromstring(req.text)
-        command = income_xml[0].text
-    except:
-        print ("Couldn't parse service response")
-        res = None
+    #try:
+    #    response = req.text
+    #    income_xml = xmlt.fromstring(req.text)
+    #    command = income_xml[0].text
+    #except:
+    #    print ("Couldn't parse service response")
+    #    response = None
 
-    if del_flac:
-        os.remove(filename)  # Remove temp file
-
-    return res
+    return req.text
 
 
 if(__name__ == '__main__'):

@@ -60,7 +60,7 @@ def audio_int(num_samples=50):
     return r
 
 
-def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
+def listen_for_speech(threshold=THRESHOLD, num_phrases=1):
     """
     Listens to Microphone, extracts phrases from it and sends it to 
     Google's TTS service and returns response. a "phrase" is sound 
@@ -105,8 +105,9 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
             # Send file to Google and get response
             r = stt_google_wav(filename) 
             if num_phrases == -1:
-                print ("Response", r)
+                print ("Response: ", r)
             else:
+                print ("Response: ", r)
                 response.append(r)
             # Reset all
             started = False
@@ -114,7 +115,6 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
             prev_audio = deque(maxlen=int(0.5 * rel) )
             audio2send = []
             n -= 1
-            print ("Listening ...")
         else:
             prev_audio.append(cur_data)
 
@@ -151,18 +151,18 @@ def stt_google_wav(audio_fname):
         files = {'file': file1.read()}
 
     
+    print ("Sending request to Yandex SK")
     req = requests.post(url, params = params, headers=headers, files = files)
-    print ("Sending request to Google TTS")
     #print "response", response
-    #try:
-    #    response = req.text
-    #    income_xml = xmlt.fromstring(req.text)
-    #    command = income_xml[0].text
-    #except:
-    #    print ("Couldn't parse service response")
-    #    response = None
+    try:
+        response = req.text
+        income_xml = xmlt.fromstring(req.text)
+        command = income_xml[0].text
+    except:
+        print ("Couldn't parse service response")
+        response = None
 
-    return req.text
+    return command
 
 
 if(__name__ == '__main__'):

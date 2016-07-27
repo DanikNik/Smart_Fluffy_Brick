@@ -1,39 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-import requests, urwid, os
+import requests, os
 from bs4 import BeautifulSoup as beso
-#################################################################################
-'''
-def exit(a):
-	if a == a:
-		raise urwid.ExitMainLoop()
-def gui(state, ans):
-	states = {'requesting':u'Я думаю, подождите...','speaking':u'Я готов ответить на ваш вопрос: \n'}
-	req = states.get(state)
-	if ans != "":
-		req += ans
-	palette = [
-		('banner', '', '', '', '#fff', '#33f'),
-		('streak', '', '', '', 'g50', '#33f'),
-		('inside', '', '', '', 'g38', '#66a'),
-		('outside', '', '', '', 'g27', '#668'),
-		('bg', '', '', '', 'g7', '#666'),]
-	placeholder = urwid.SolidFill()
-	loop = urwid.MainLoop(placeholder, palette, unhandled_input=exit)
-	loop.screen.set_terminal_properties(colors=256)
-	loop.widget = urwid.AttrMap(placeholder, 'bg')
-	loop.widget.original_widget = urwid.Filler(urwid.Pile([]))
-
-	div = urwid.Divider()
-	outside = urwid.AttrMap(div, 'outside')
-	inside = urwid.AttrMap(div, 'inside')
-	txt = urwid.Text(('banner', u"Smart@Fluffy_Brick# "+req), align='center')
-	streak = urwid.AttrMap(txt, 'streak')
-	pile = loop.widget.base_widget # .base_widget skips the decorations
-	for item in [outside, inside, streak, inside, outside]:
-		pile.contents.append((item, pile.options()))
-	loop.run()
-'''
 #################################################################################
 def GetThingQuest(request):
 	try:#Тут короче делаем реквест, получаем данные json, и расшифровываем

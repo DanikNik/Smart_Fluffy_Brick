@@ -38,7 +38,7 @@
 
 #### При разработке *данной ветки проекта* использовались:
 ***ЯП:*** Python 3.5 <br>
-***БТ:*** requests, os, BeautifulSoup4, urwid, subprocess
+***БТ:*** requests, os, BeautifulSoup4, urwid, subprocess <br>
 ***СВ:*** wikipedia.org, realmeteo.ru, translate.yandex.ru
 
 #### Как ЭТИМ пользоваться:

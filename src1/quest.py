@@ -1,7 +1,39 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-import requests, timeit
+import requests, urwid, os
 from bs4 import BeautifulSoup as beso
+#################################################################################
+'''
+def exit(a):
+	if a == a:
+		raise urwid.ExitMainLoop()
+def gui(state, ans):
+	states = {'requesting':u'Я думаю, подождите...','speaking':u'Я готов ответить на ваш вопрос: \n'}
+	req = states.get(state)
+	if ans != "":
+		req += ans
+	palette = [
+		('banner', '', '', '', '#fff', '#33f'),
+		('streak', '', '', '', 'g50', '#33f'),
+		('inside', '', '', '', 'g38', '#66a'),
+		('outside', '', '', '', 'g27', '#668'),
+		('bg', '', '', '', 'g7', '#666'),]
+	placeholder = urwid.SolidFill()
+	loop = urwid.MainLoop(placeholder, palette, unhandled_input=exit)
+	loop.screen.set_terminal_properties(colors=256)
+	loop.widget = urwid.AttrMap(placeholder, 'bg')
+	loop.widget.original_widget = urwid.Filler(urwid.Pile([]))
+
+	div = urwid.Divider()
+	outside = urwid.AttrMap(div, 'outside')
+	inside = urwid.AttrMap(div, 'inside')
+	txt = urwid.Text(('banner', u"Smart@Fluffy_Brick# "+req), align='center')
+	streak = urwid.AttrMap(txt, 'streak')
+	pile = loop.widget.base_widget # .base_widget skips the decorations
+	for item in [outside, inside, streak, inside, outside]:
+		pile.contents.append((item, pile.options()))
+	loop.run()
+'''
 #################################################################################
 def GetThingQuest(request):
 	try:#Тут короче делаем реквест, получаем данные json, и расшифровываем
@@ -122,15 +154,24 @@ def main():
 #################################################################################
 	#Тут всё очевидно:
 	if (arr_l_text[0] == "погода") or (arr_l_text[1] == "погода"):
+		gui('requesting', '')
 		ans = Weather(text, arr_l_text)
 	elif (arr_l_text[0] == "переведи") or (arr_l_text[1] == "переведи"):
+		gui('requesting', '')
 		lang = arr_l_text[2]
 		ans = Trans(l_text, lang)
 	elif (arr_l_text[0] == "вопрос") or (arr_l_text[1] == "вопрос"):
 		if (l_text.find('кто такой') != -1) or (l_text.find('кто такая') != -1) or (l_text.find('кто такое') != -1) or (l_text.find('что такое') != -1) or (l_text.find('кто такие') != -1) or ((l_text.find('что значит')) != 1):
+			gui('requesting', '')
 			ans = WhatIs(l_text, arr_l_text)
 	else:
+		gui('requesting', '')
 		ans = "Странные вещи говорите вы. Не понимаю вас я."
+	try:
+		os.system('clear')
+	except:
+		os.system('cls')
+	gui('speaking', ans)
 	print(ans)
 
 ###MAIN###

@@ -12,12 +12,14 @@ def getCommand():
 	headers = {"Content-Type": "audio/x-pcm;bit=16;rate=16000"}
 	#rec.recordCommand()
 
-	with open('command.pcm', 'rb') as file1:
+	with open('../command.pcm', 'rb') as file1:
 		files = {'file': file1.read()}
 	req = requests.post(url, params = params, headers = headers, files = files)
-
-	#income_xml = xmlt.fromstring(req.text)
-	#command = income_xml[0].text
-	return(req.text)
+	try:
+		income_xml = xmlt.fromstring(req.text)
+		command = income_xml[0].text
+		return(command)
+	except:
+		return "Couldn's recognise"
 
 print(getCommand())

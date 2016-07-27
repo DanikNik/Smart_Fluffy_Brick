@@ -7,7 +7,7 @@ def recordCommand():
 	CHANNELS = 1
 	RATE = 16000
 	RECORD_SECONDS = 4
-	WAVE_OUTPUT_FILENAME = "output.pcm"
+	WAVE_OUTPUT_FILENAME = "command.pcm"
 
 	p = pyaudio.PyAudio()
 

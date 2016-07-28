@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-# -*- coding: utf-8 -*-
 import requests, os
 from bs4 import BeautifulSoup as beso
 #################################################################################
@@ -84,7 +83,8 @@ def Weather(text, text_arr):
 	cities = {'абакан':'abakan','анапа':'anapa','архангельск':'arkhangelsk','астрахань':'astrakhan','барнаул':'barnaul','брянск':'bryansk','великий новгород':'vnovgorod','владивосток':'vladivostok','волгоград':'volgograd','вологда':'vologda','воронеж':'voronezh','екатеринбург':'ekaterinburg','иваново':'ivanovo','ижевск':'izhevsk','казань':'kazan','калининград':'kaliningrad','киров':'kirov','краснодар':'krasnodar','красноярск':'krasnoyarsk','магадан':'magadan','магнитогорск':'magnitogorsk','майкоп':'maykop','махачкала':'mahachkala','москва':'moscow','мурманск':'murmansk','набережные челны':'nab_chelnu','новокузнецк':'novokuznetsk','омск':'omsk','оренбург':'orenburg','пенза':'penza','пермь':'perm','псков':'pskov','санкт-петербург':'spb','саратов':'saratov','симферополь':'simferopol','смоленск':'smolensk','сочи':'sochi','сыктывкар':'syktyvkar','таганрог':'taganrog','тверь':'tver','тула':'tula','тюмень':'tumen','уфа':'ufa','хабаровск':'habarovsk','чебоксары':'cheboksary','челябинск':'chelyabinsk','ярослваль':'yaroslavl'}
 	citycodes = {0:3, 1:4, 2:3, 3:4, 4:3}#это данные для поиска значений
 	finlist = []#будущий лист значений
-	try:#Пробуем...
+	#try:#Пробуем...
+	for i in range(1):
 		mi = text_arr.index("городе") + 1
 		city = text_arr[mi]#город
 		if adds.count(city) != 0:#Нас лучай, если название города состоит из двух слов:
@@ -111,12 +111,11 @@ def Weather(text, text_arr):
 		aqua_metr = finlist[3]####
 		wind_metr = finlist[4]#######
 		ans = "Погода в городе "+city1+". Температура воздуха "+real_temp+" градусов. Ощущается "+thin_temp+". Атмосферное давление "+baro_metr+" миллиметров ртутного столба. Влажность воздуха "+aqua_metr+" процентов. Скорость ветра "+wind_metr+" метров в секунду. RealMeteo... точка ru..."
-	except:#...А если не получается:
-		ans = "Я не знаю такого города"
+	#except:#...А если не получается:
+	#	ans = "Я не знаю такого города"
 	return ans	
 
-def main():
-	text = input()##Способ общения: input или open
+def main(text):
 	l_text = text.lower()
 	arr_l_text = l_text.split()
 #################################################################################
@@ -127,10 +126,15 @@ def main():
 		lang = arr_l_text[2]
 		ans = Trans(l_text, lang)
 	elif (arr_l_text[0] == "вопрос") or (arr_l_text[1] == "вопрос"):
-		if (l_text.find('кто такой') != -1) or (l_text.find('кто такая') != -1) or (l_text.find('кто такое') != -1) or (l_text.find('что такое') != -1) or (l_text.find('кто такие') != -1) or ((l_text.find('что значит')) != 1):			ans = WhatIs(l_text, arr_l_text)
+		if (l_text.find('кто такой') != -1) or (l_text.find('кто такая') != -1) or (l_text.find('кто такое') != -1) or (l_text.find('что такое') != -1) or (l_text.find('кто такие') != -1) or ((l_text.find('что значит')) != 1):
+			ans = WhatIs(l_text, arr_l_text)
 	else:
 		ans = "Странные вещи говорите вы. Не понимаю вас я."
-	print(ans)
+	#try:
+	#	os.system('clear')
+	#except:
+	#	os.system('cls')
+	return ans
 
 ###MAIN###
-main()
+print(main(input()))

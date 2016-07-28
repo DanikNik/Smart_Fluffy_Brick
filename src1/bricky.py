@@ -28,5 +28,5 @@ def gui():
 		pile.contents.append((item, pile.options()))
 	loop.run()
 
-subprocess.Popen('./main.py')
+#subprocess.Popen('./main.py')
 gui()

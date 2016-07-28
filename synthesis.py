@@ -5,41 +5,44 @@ import wave
 
 CHUNK = 1024
 
-url = 'https://tts.voicetech.yandex.net/generate'
-text = '''ААААААААА!О-ДААААААААААААААААААА! ДААААААААА ДААААААААААААААА ДАААА!'''
-params = {'text' : text,
-		  'format' : 'wav',
-		  'lang' : 'ru-RU',
-		  'speaker' : 'zahar',
-		  'key' : 'f1233cf8-c27a-4bad-9b5e-04f6ed2f265a'}
-req = requests.get(url, params = params)
-filename = 'synthesys.wav'
-with open(filename, 'wb') as file:
-	file.write(req.content)
 
-wf = wave.open(filename, 'rb')
+def synth(text):
+	url = 'https://tts.voicetech.yandex.net/generate'
+	params = {'text' : text,
+			  'format' : 'wav',
+			  'lang' : 'ru-RU',
+			  'speaker' : 'zahar',
+			  'key' : 'f1233cf8-c27a-4bad-9b5e-04f6ed2f265a'}
+	req = requests.get(url, params = params)
+	filename = 'synthesys.wav'
+	with open(filename, 'wb') as file:
+		file.write(req.content)
 
-p = pyaudio.PyAudio()
+	wf = wave.open(filename, 'rb')
 
-# open stream (2)
-stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
-                channels=wf.getnchannels(),
-                rate=wf.getframerate(),
-                output=True)
+	p = pyaudio.PyAudio()
 
-# read data
-data = wf.readframes(CHUNK)
+	# open stream (2)
+	stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
+					channels=wf.getnchannels(),
+					rate=wf.getframerate(),
+					output=True)
 
-# play stream (3)
-while len(data) > 0:
-    stream.write(data)
-    data = wf.readframes(CHUNK)
+	# read data
+	data = wf.readframes(CHUNK)
 
-# stop stream (4)
-stream.stop_stream()
-stream.close()
+	# play stream (3)
+	while len(data) > 0:
+		stream.write(data)
+		data = wf.readframes(CHUNK)
 
-# close PyAudio (5)
-p.terminate()
-wf.close()
-os.remove(filename)
+	# stop stream (4)
+	stream.stop_stream()
+	stream.close()
+
+	# close PyAudio (5)
+	p.terminate()
+	wf.close()
+	os.remove(filename)
+	pass
+	

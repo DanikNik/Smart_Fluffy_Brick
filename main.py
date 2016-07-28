@@ -1,5 +1,7 @@
 import start_request
 import os
+import quest
+import synthesis
 
 command2 = ''
 while True:
@@ -9,7 +11,10 @@ while True:
 		print("I'm listening, my Owner!")
 		command2 = start_request.listen_for_speech()
 		print(command2)
-		break
+		os.remove('command.pcm')
+		answer = quest.main(command2)
+		print(answer)
+		#synthesis.synth(answer)
 	else:
 		continue
 
